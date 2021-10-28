@@ -1,4 +1,4 @@
-package _storage
+package _fs
 
 import (
 	"fmt"

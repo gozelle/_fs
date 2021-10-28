@@ -1,3 +1,3 @@
-module github.com/koyeo/_storage
+module github.com/goneral/_fs
 
 go 1.15
