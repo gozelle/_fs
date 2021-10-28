@@ -2,6 +2,7 @@ package _fs
 
 import (
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -113,4 +114,24 @@ func Write(path string, content []byte) (err error) {
 		return
 	}
 	return
+}
+
+func RealName(path string) (string, error) {
+	
+	stat, err := os.Lstat(path)
+	if err != nil {
+		return "", err
+	}
+	
+	switch stat.Mode().Type() {
+	case fs.ModeSymlink:
+		var name string
+		name, err = os.Readlink(path)
+		if err != nil {
+			return "", err
+		}
+		return name, nil
+	}
+	
+	return filepath.Base(path), nil
 }

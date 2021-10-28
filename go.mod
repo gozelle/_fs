@@ -1,3 +1,3 @@
 module github.com/goneral/_fs
 
-go 1.15
+go 1.16
