@@ -23,8 +23,9 @@ func Remove(path string) (err error) {
 	return
 }
 
-func Exist(path string) (ok bool, err error) {
+func Exists(path string) (ok bool, err error) {
 	if _, err = os.Stat(path); os.IsNotExist(err) {
+		err = nil
 		return
 	} else if err != nil {
 		return
@@ -60,14 +61,14 @@ func IsDir(path string) (ok bool, err error) {
 }
 
 func Files(path string, suffix ...string) (files []string, err error) {
-	
+
 	dir, err := ioutil.ReadDir(path)
 	if err != nil {
 		return
 	}
-	
+
 	sep := string(os.PathSeparator)
-	
+
 	for _, fi := range dir {
 		if fi.IsDir() {
 			var dirFiles []string
@@ -77,13 +78,13 @@ func Files(path string, suffix ...string) (files []string, err error) {
 			}
 			files = append(files, dirFiles...)
 		} else {
-			
+
 			if hasSuffix(suffix, fi.Name()) {
 				files = append(files, filepath.Join(path, sep, fi.Name()))
 			}
 		}
 	}
-	
+
 	return
 }
 
@@ -93,7 +94,7 @@ func hasSuffix(suffix []string, fileName string) bool {
 			return true
 		}
 	}
-	
+
 	return false
 }
 
@@ -117,12 +118,12 @@ func Write(path string, content []byte) (err error) {
 }
 
 func RealName(path string) (string, error) {
-	
+
 	stat, err := os.Lstat(path)
 	if err != nil {
 		return "", err
 	}
-	
+
 	switch stat.Mode().Type() {
 	case fs.ModeSymlink:
 		var name string
@@ -132,6 +133,6 @@ func RealName(path string) (string, error) {
 		}
 		return name, nil
 	}
-	
+
 	return filepath.Base(path), nil
 }
